@@ -11,11 +11,13 @@ def printMaxThreads(df_users):
     # 初始化变量
     w0 = min_workload
     crossover_point = None
-    confidence_lower_bound = 0.96
+    confidence_lower_bound = 0.90
     # 迭代增加工作负载
     while w0 <= max_workload:
         # 计算当前工作负载及以下的所有SLO满足度值
-        current_data = df_users[(df_users["threads"] > w0-1) & (df_users["threads"] <= w0)].iloc[:, 2] / df_users[(df_users["threads"] >w0-1) &(df_users["threads"] <= w0)].iloc[:, 3]
+        # 计算当前工作负载及以下的所有SLO满足度值
+        current_data = df[(df["threads"] == w0)].iloc[:, 1] / \
+                       df[(df["threads"] == w0)].iloc[:, 2]
         # 计算95%置信区间
         mean_sat = np.mean(current_data)
         std_dev = np.std(current_data, ddof=1)
